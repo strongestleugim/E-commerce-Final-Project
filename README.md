@@ -65,6 +65,13 @@ That means the demo database, demo accounts, and sample catalog/order data are r
 
 The seed command also loads sample categories, products, and demo orders for presentation.
 
+## Group Members
+- Jerico Miguel A. Lindain
+- Christian James T. Able
+- Roeb Andrei L. Dela Cruz
+- Vince Lander G. Leander
+- Luis Miguel A. Mina
+
 ## Main Modules
 - Home
 - Categories
