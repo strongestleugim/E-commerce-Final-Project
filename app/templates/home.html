@@ -4,61 +4,65 @@
 <section class="store-hero">
   <div class="store-hero__copy">
     <p class="eyebrow">Performance Nutrition</p>
-    <h1>Built to hit like a modern supplement store.</h1>
+    <h1>Results aren&rsquo;t accidental. They&rsquo;re engineered.</h1>
+    <p class="store-hero__strap">
+      Science-backed formulas. Premium ingredients. No unnecessary fillers.
+    </p>
     <p class="store-hero__lede">
-      GAINZ LAB combines premium pack presentation, performance-focused product positioning, and
-      a clean e-commerce flow for lifters, athletes, and everyday grinders who train with purpose.
+      GAINZ LAB is built for lifters, athletes, and everyday grinders who train with purpose.
+      Every formula is positioned to support performance, support recovery, and keep a premium
+      supplement routine clean and consistent.
     </p>
     <div class="store-hero__actions">
       <a class="button" href="{{ url_for('shop.index') }}">Shop Best Sellers</a>
-      <a class="button button--ghost" href="{{ url_for('shop.detail', slug='gainz-lab-whey-core') }}">View Whey Core</a>
+      <a class="button button--ghost" href="{{ url_for('main.categories') }}">Browse Categories</a>
     </div>
     <div class="store-hero__flags">
       <span>Premium formulas</span>
-      <span>Fast category browsing</span>
-      <span>Clean add-to-cart flow</span>
+      <span>Built for performance</span>
+      <span>No unnecessary fillers</span>
     </div>
   </div>
-  <aside class="store-hero__visual">
-    <div class="store-hero__visual-copy">
-      <p class="card__label">Featured Formula</p>
-      <h2>GAINZ LAB Whey Core</h2>
-      <p>
-        Double Chocolate whey protein positioned for strength goals, daily consistency, and a
-        premium first impression during the demo.
-      </p>
-      <a class="button" href="{{ url_for('shop.detail', slug='gainz-lab-whey-core') }}">Shop This Product</a>
-    </div>
+  <aside class="store-hero__visual store-hero__visual--lifestyle">
     <img
-      class="store-hero__image"
-      src="{{ url_for('static', filename='img/products/gainz-lab-whey-core.jpg') }}"
-      alt="GAINZ LAB Whey Core"
+      class="store-hero__image store-hero__image--lifestyle"
+      src="{{ url_for('static', filename='img/brand/gainzlab-hero-beach-training.png') }}"
+      alt="GAINZ LAB fitness lifestyle hero image"
     >
-    <div class="store-hero__chips">
-      <span>Protein</span>
-      <span>2 lb</span>
-      <span>Double Chocolate</span>
+    <div class="store-hero__visual-copy store-hero__visual-copy--overlay">
+      <p class="card__label">Built for performance</p>
+      <h2>Premium training identity.</h2>
+      <p>
+        A clean brand direction for athletes who want strong visuals, modern formulas, and a more
+        polished supplement-store experience.
+      </p>
+      <a class="button" href="{{ url_for('shop.detail', slug='gainz-lab-whey-core') }}">View Whey Core</a>
+    </div>
+    <div class="store-hero__chips store-hero__chips--overlay">
+      <span>Strength</span>
+      <span>Recovery</span>
+      <span>Consistency</span>
     </div>
   </aside>
 </section>
 
 <section class="promo-strip">
   <article class="promo-strip__card promo-strip__card--dark">
-    <p class="card__label">Featured Protein</p>
-    <h2>Start with a clean hero product.</h2>
-    <p>Lead the storefront with the whey range, then move into bundles and recovery support.</p>
+    <p class="card__label">Brand Direction</p>
+    <h2>Premium supplement retail, kept clean.</h2>
+    <p>GAINZ LAB blends lifestyle-driven branding with a straightforward e-commerce experience.</p>
     <a class="text-link" href="{{ url_for('shop.detail', slug='gainz-lab-whey-core') }}">Open Whey Core</a>
   </article>
   <article class="promo-strip__card">
     <p class="card__label">Training Energy</p>
     <h2>Pre-workout built for fast comparison.</h2>
-    <p>Use the shop filters to jump from protein into pre-workout and creatine in one pass.</p>
+    <p>Use the shop filters to move from protein into pre-workout and creatine in one pass.</p>
     <a class="text-link" href="{{ url_for('shop.index', category='pre-workout') }}">Browse Pre-Workout</a>
   </article>
   <article class="promo-strip__card">
     <p class="card__label">Stacked Offers</p>
-    <h2>Bundles give the demo a stronger retail feel.</h2>
-    <p>Starter Stack and Strength Stack make the catalog feel merchandised instead of generic.</p>
+    <h2>Bundles strengthen the catalog story.</h2>
+    <p>Starter Stack and Strength Stack make the storefront feel more merchandised and complete.</p>
     <a class="text-link" href="{{ url_for('shop.index', category='bundles') }}">View Bundles</a>
   </article>
 </section>
@@ -83,6 +87,46 @@
   </div>
 </section>
 
+<section class="store-section">
+  <div class="brand-story">
+    <article class="brand-story__copy">
+      <p class="eyebrow">Why Choose GAINZ LAB</p>
+      <h2>Science-backed formulas. Premium ingredients. No unnecessary fillers.</h2>
+      <p>
+        GAINZ LAB is positioned for customers who want a modern performance-nutrition brand with
+        clean product language, premium presentation, and a catalog built around real training-day
+        routines.
+      </p>
+      <div class="brand-story__pillars">
+        <article>
+          <span>Performance</span>
+          <strong>Formulated for strength, training intensity, and everyday consistency.</strong>
+        </article>
+        <article>
+          <span>Quality</span>
+          <strong>Premium ingredients and clean positioning without unnecessary filler focus.</strong>
+        </article>
+        <article>
+          <span>Recovery</span>
+          <strong>Built to support recovery habits and repeatable training routines.</strong>
+        </article>
+      </div>
+    </article>
+    <article class="brand-story__media">
+      <img
+        class="brand-story__image"
+        src="{{ url_for('static', filename='img/brand/gainzlab-brand-dumbbell-curl.png') }}"
+        alt="Athlete training with dumbbells for GAINZ LAB brand section"
+      >
+      <div class="brand-story__caption">
+        <p class="card__label">Athlete Focus</p>
+        <h3>Built for performance.</h3>
+        <p>Designed for lifters who want a stronger daily routine on the gym floor and beyond.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
 <section class="store-section store-section--merch">
   <div class="section__heading section__heading--store">
     <div>
@@ -97,7 +141,7 @@
       <div class="merch-card__body">
         <p class="card__label">Protein</p>
         <h3>GAINZ LAB Whey Core</h3>
-        <p>Use this as the lead product for the hero, product detail page, and checkout walkthrough.</p>
+        <p>A flagship protein option that anchors the catalog with a strong premium supplement look.</p>
         <a class="button" href="{{ url_for('shop.detail', slug='gainz-lab-whey-core') }}">View Details</a>
       </div>
     </article>
@@ -122,14 +166,54 @@
   </div>
 </section>
 
+<section class="store-section">
+  <div class="brand-split">
+    <article class="brand-panel brand-panel--dark">
+      <div class="brand-panel__copy">
+        <p class="eyebrow">Brand Identity</p>
+        <h2>Strong visuals. Clean structure. Presentation-ready flow.</h2>
+        <p>
+          The storefront keeps lifestyle branding, product discovery, cart flow, checkout, and
+          admin walkthroughs visually connected without presenting physique images as product proof.
+        </p>
+        <div class="brand-panel__points">
+          <article>
+            <span>01</span>
+            <strong>Distinct premium supplement-store styling</strong>
+          </article>
+          <article>
+            <span>02</span>
+            <strong>Clear customer and admin flow for live demos</strong>
+          </article>
+          <article>
+            <span>03</span>
+            <strong>Responsive layout for desktop, tablet, and mobile</strong>
+          </article>
+        </div>
+      </div>
+    </article>
+    <article class="brand-panel brand-panel--image">
+      <img
+        class="brand-panel__image"
+        src="{{ url_for('static', filename='img/brand/gainzlab-brand-classic-physique.png') }}"
+        alt="GAINZ LAB physique lifestyle image"
+      >
+      <div class="brand-panel__overlay">
+        <p class="card__label">GAINZ LAB Lifestyle</p>
+        <h3>Built around discipline and consistency.</h3>
+      </div>
+    </article>
+  </div>
+</section>
+
 <section class="store-section store-section--dark">
-  <div class="store-banner">
+  <div class="store-banner store-banner--stats">
     <div class="store-banner__copy">
-      <p class="eyebrow">Why GAINZ LAB</p>
-      <h2>Premium, fast, and easy to present live.</h2>
+      <p class="eyebrow">Store Snapshot</p>
+      <h2>Ready for customer and admin walkthroughs.</h2>
       <p>
-        The redesigned storefront keeps product discovery, detail viewing, cart flow, and admin
-        walkthroughs visually connected without copying another store one-to-one.
+        Browse the catalog, place an order, review order history, and switch to the admin area for
+        product and order management during the final project demo.
       </p>
       <div class="store-banner__actions">
         <a class="button" href="{{ url_for('shop.index') }}">Shop Now</a>
