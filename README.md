@@ -4,6 +4,11 @@ GAINZ LAB is a student final-project e-commerce website for a fitness supplement
 
 This is an academic/demo project. Product content is for presentation purposes only and does not provide medical advice.
 
+## Live Demo
+After deployment, place your live URL here so visitors can open the site directly from GitHub:
+
+`Live Demo: https://your-render-url.onrender.com`
+
 ## Features
 - Customer registration, login, and logout
 - Role-based access for `customer` and `admin`
@@ -38,6 +43,21 @@ Copy-Item .env.example .env -ErrorAction SilentlyContinue
 ```
 
 Open the app at [http://127.0.0.1:5000](http://127.0.0.1:5000).
+
+## Render Deployment
+This repository includes [render.yaml](render.yaml) for a basic Render web-service deployment.
+
+1. Push the latest code to GitHub.
+2. In Render, create a new web service from this repository.
+3. Render should detect the existing `render.yaml` settings.
+4. After the first deploy, open the generated `onrender.com` URL.
+
+This deployment starts by running:
+- `flask --app run.py init-db`
+- `flask --app run.py seed-db`
+- `gunicorn --bind 0.0.0.0:$PORT run:app`
+
+That means the demo database, demo accounts, and sample catalog/order data are recreated automatically on service boot for a stable presentation flow.
 
 ## Demo Accounts
 - Admin: `admin@gainzlab.local` / `Admin123!`
@@ -89,6 +109,7 @@ Core relationships:
 - Shipping fees are implemented, but estimated delivery time is not shown yet
 - Admin user management is still a placeholder
 - Product deletion uses soft deactivation instead of destructive delete
+- The Render demo deployment uses SQLite and auto-seeded demo data, so it is suitable for presentation use, not production use
 
 ## Testing
 Run:

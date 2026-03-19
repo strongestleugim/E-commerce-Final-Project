@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: gainz-lab-demo
+    runtime: python
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /
+    buildCommand: pip install -r requirements.txt
+    startCommand: bash scripts/render_start.sh
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.11
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SQLITE_DB_PATH
+        value: instance/gainz_lab.db
