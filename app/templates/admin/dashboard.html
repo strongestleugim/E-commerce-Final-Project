@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+  <p class="eyebrow">Admin</p>
+  <h1>Admin dashboard</h1>
+  <p>Useful overview information for catalog, customers, and order activity.</p>
+</section>
+
+{% include "admin/_nav.html" %}
+
+<section class="card admin-header-card">
+  <p class="card__label">Signed In As</p>
+  <h2>{{ admin_user.name }}</h2>
+  <p>{{ admin_user.email }} - {{ admin_user.role|capitalize }}</p>
+</section>
+
+{% if not dashboard.dashboard_ready %}
+<section class="card catalog-empty">
+  <p class="card__label">Dashboard Unavailable</p>
+  <h2>The admin dashboard is not ready yet.</h2>
+  <p>Initialize the database before using the admin overview.</p>
+</section>
+{% else %}
+<section class="admin-stats">
+  <article class="card admin-stat">
+    <p class="card__label">Total Products</p>
+    <strong>{{ dashboard.total_products }}</strong>
+    <p>Products currently in the catalog.</p>
+  </article>
+  <article class="card admin-stat">
+    <p class="card__label">Total Categories</p>
+    <strong>{{ dashboard.total_categories }}</strong>
+    <p>Category groups used in the storefront.</p>
+  </article>
+  <article class="card admin-stat">
+    <p class="card__label">Total Orders</p>
+    <strong>{{ dashboard.total_orders }}</strong>
+    <p>Orders placed by customers so far.</p>
+  </article>
+  <article class="card admin-stat">
+    <p class="card__label">Total Customers</p>
+    <strong>{{ dashboard.total_customers }}</strong>
+    <p>Registered customer accounts.</p>
+  </article>
+</section>
+
+<section class="admin-panels">
+  <article class="card admin-panel">
+    <div class="admin-panel__header">
+      <div>
+        <p class="card__label">Recent Orders</p>
+        <h2>Latest customer activity</h2>
+      </div>
+      <a class="text-link" href="{{ url_for('admin.orders') }}">Manage orders</a>
+    </div>
+
+    {% if dashboard.recent_orders %}
+    <div class="admin-list">
+      {% for order in dashboard.recent_orders %}
+      <article class="admin-list__row">
+        <div class="admin-list__copy">
+          <strong><a href="{{ url_for('admin.order_detail', order_number=order.order_number) }}">{{ order.order_number }}</a></strong>
+          <p>{{ order.user.name }} - {{ order.placed_at.strftime('%b %d, %Y %I:%M %p') }}</p>
+        </div>
+        <div class="admin-list__meta">
+          <span class="product-chip">{{ order.payment_status }}</span>
+          <span class="stock-badge">{{ order.order_status }}</span>
+          <strong>PHP {{ order.total_amount }}</strong>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="admin-empty">No customer orders have been placed yet.</p>
+    {% endif %}
+  </article>
+
+  <article class="card admin-panel">
+    <div class="admin-panel__header">
+      <div>
+        <p class="card__label">Low Stock</p>
+        <h2>Products to watch</h2>
+      </div>
+      <a class="text-link" href="{{ url_for('admin.products') }}">Manage products</a>
+    </div>
+
+    {% if dashboard.low_stock_products %}
+    <div class="admin-list">
+      {% for product in dashboard.low_stock_products %}
+      <article class="admin-list__row">
+        <div class="admin-list__copy">
+          <strong>{{ product.name }}</strong>
+          <p>{{ product.category.name }} - {{ product.flavor_or_variant or "Core Formula" }}</p>
+        </div>
+        <div class="admin-list__meta">
+          <span class="stock-badge stock-badge--low">{{ product.stock }} left</span>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="admin-empty">
+      No active products are at or below the low-stock threshold of {{ dashboard.low_stock_threshold }} units.
+    </p>
+    {% endif %}
+  </article>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,40 @@
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href="{{ url_for('main.home') }}">
+      <span class="brand__mark">GL</span>
+      <span>
+        <span class="brand__name">{{ brand_name }}</span>
+        <span class="brand__tag">{{ brand_tagline }}</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a class="site-nav__link{% if request.endpoint == 'main.home' %} is-active{% endif %}" href="{{ url_for('main.home') }}">Home</a>
+      <a class="site-nav__link{% if request.endpoint == 'shop.index' or request.endpoint == 'shop.detail' %} is-active{% endif %}" href="{{ url_for('shop.index') }}">Shop</a>
+      <a class="site-nav__link{% if request.endpoint == 'main.categories' %} is-active{% endif %}" href="{{ url_for('main.categories') }}">Categories</a>
+      <a class="site-nav__link{% if request.endpoint == 'cart.index' %} is-active{% endif %}" href="{{ url_for('cart.index') }}">Cart</a>
+      {% if current_user.is_authenticated %}
+      <a class="site-nav__link{% if request.endpoint == 'orders.index' %} is-active{% endif %}" href="{{ url_for('orders.index') }}">Orders</a>
+      {% endif %}
+      {% if current_user.is_authenticated and current_user.is_admin %}
+      <a class="site-nav__link{% if request.blueprint == 'admin' %} is-active{% endif %}" href="{{ url_for('admin.dashboard') }}">Admin</a>
+      {% endif %}
+    </nav>
+
+    <div class="site-actions">
+      {% if current_user.is_authenticated %}
+      <span class="user-chip">
+        <strong>{{ current_user.name }}</strong>
+        <span>{{ current_user.role|capitalize }}</span>
+      </span>
+      <a class="button button--outline" href="{{ url_for('account.profile') }}">Profile</a>
+      <form class="inline-form" method="post" action="{{ url_for('auth.logout') }}">
+        <button class="button button--ghost" type="submit">Logout</button>
+      </form>
+      {% else %}
+      <a class="button button--ghost" href="{{ url_for('auth.login') }}">Login</a>
+      <a class="button" href="{{ url_for('auth.register') }}">Register</a>
+      {% endif %}
+    </div>
+  </div>
+</header>

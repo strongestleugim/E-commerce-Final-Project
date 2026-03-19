@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card catalog-empty">
+  <p class="card__label">Product Not Found</p>
+  <h1>This product is not available.</h1>
+  <p>
+    The product you requested may not exist, may be inactive, or may have been removed from the
+    public catalog. Requested slug: <code>{{ missing_slug }}</code>
+  </p>
+  <div class="catalog-empty__actions">
+    <a class="button" href="{{ url_for('shop.index') }}">Back to Shop</a>
+    <a class="button button--ghost" href="{{ url_for('main.categories') }}">Browse Categories</a>
+  </div>
+</section>
+{% endblock %}

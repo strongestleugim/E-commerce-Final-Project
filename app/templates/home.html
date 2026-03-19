@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="store-hero">
+  <div class="store-hero__copy">
+    <p class="eyebrow">Performance Nutrition</p>
+    <h1>Built to hit like a modern supplement store.</h1>
+    <p class="store-hero__lede">
+      GAINZ LAB combines premium pack presentation, performance-focused product positioning, and
+      a clean e-commerce flow for lifters, athletes, and everyday grinders who train with purpose.
+    </p>
+    <div class="store-hero__actions">
+      <a class="button" href="{{ url_for('shop.index') }}">Shop Best Sellers</a>
+      <a class="button button--ghost" href="{{ url_for('shop.detail', slug='gainz-lab-whey-core') }}">View Whey Core</a>
+    </div>
+    <div class="store-hero__flags">
+      <span>Premium formulas</span>
+      <span>Fast category browsing</span>
+      <span>Clean add-to-cart flow</span>
+    </div>
+  </div>
+  <aside class="store-hero__visual">
+    <div class="store-hero__visual-copy">
+      <p class="card__label">Featured Formula</p>
+      <h2>GAINZ LAB Whey Core</h2>
+      <p>
+        Double Chocolate whey protein positioned for strength goals, daily consistency, and a
+        premium first impression during the demo.
+      </p>
+      <a class="button" href="{{ url_for('shop.detail', slug='gainz-lab-whey-core') }}">Shop This Product</a>
+    </div>
+    <img
+      class="store-hero__image"
+      src="{{ url_for('static', filename='img/products/gainz-lab-whey-core.jpg') }}"
+      alt="GAINZ LAB Whey Core"
+    >
+    <div class="store-hero__chips">
+      <span>Protein</span>
+      <span>2 lb</span>
+      <span>Double Chocolate</span>
+    </div>
+  </aside>
+</section>
+
+<section class="promo-strip">
+  <article class="promo-strip__card promo-strip__card--dark">
+    <p class="card__label">Featured Protein</p>
+    <h2>Start with a clean hero product.</h2>
+    <p>Lead the storefront with the whey range, then move into bundles and recovery support.</p>
+    <a class="text-link" href="{{ url_for('shop.detail', slug='gainz-lab-whey-core') }}">Open Whey Core</a>
+  </article>
+  <article class="promo-strip__card">
+    <p class="card__label">Training Energy</p>
+    <h2>Pre-workout built for fast comparison.</h2>
+    <p>Use the shop filters to jump from protein into pre-workout and creatine in one pass.</p>
+    <a class="text-link" href="{{ url_for('shop.index', category='pre-workout') }}">Browse Pre-Workout</a>
+  </article>
+  <article class="promo-strip__card">
+    <p class="card__label">Stacked Offers</p>
+    <h2>Bundles give the demo a stronger retail feel.</h2>
+    <p>Starter Stack and Strength Stack make the catalog feel merchandised instead of generic.</p>
+    <a class="text-link" href="{{ url_for('shop.index', category='bundles') }}">View Bundles</a>
+  </article>
+</section>
+
+<section class="store-section">
+  <div class="section__heading section__heading--store">
+    <div>
+      <p class="eyebrow">Top Categories</p>
+      <h2>Shop the lineup by goal.</h2>
+    </div>
+    <a class="text-link" href="{{ url_for('main.categories') }}">See all categories</a>
+  </div>
+  <div class="store-category-grid">
+    {% for category in preferred_categories %}
+    <article class="store-category-card">
+      <p class="card__label">{{ '%02d'|format(loop.index) }}</p>
+      <h3>{{ category.name }}</h3>
+      <p>{{ category.summary }}</p>
+      <a class="button button--ghost" href="{{ url_for('shop.index', category=category.slug) }}">Shop {{ category.name }}</a>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="store-section store-section--merch">
+  <div class="section__heading section__heading--store">
+    <div>
+      <p class="eyebrow">Merchandise Focus</p>
+      <h2>Three products that sell the look fast.</h2>
+    </div>
+    <a class="text-link" href="{{ url_for('shop.index') }}">View full catalog</a>
+  </div>
+  <div class="merch-grid">
+    <article class="merch-card">
+      <img src="{{ url_for('static', filename='img/products/gainz-lab-whey-core.jpg') }}" alt="GAINZ LAB Whey Core">
+      <div class="merch-card__body">
+        <p class="card__label">Protein</p>
+        <h3>GAINZ LAB Whey Core</h3>
+        <p>Use this as the lead product for the hero, product detail page, and checkout walkthrough.</p>
+        <a class="button" href="{{ url_for('shop.detail', slug='gainz-lab-whey-core') }}">View Details</a>
+      </div>
+    </article>
+    <article class="merch-card">
+      <img src="{{ url_for('static', filename='img/products/gainz-lab-pre-ignite.jpg') }}" alt="GAINZ LAB Pre-Ignite">
+      <div class="merch-card__body">
+        <p class="card__label">Pre-Workout</p>
+        <h3>GAINZ LAB Pre-Ignite</h3>
+        <p>Sharp contrast, bright flavor naming, and a strong shelf presence help the shop feel more commercial.</p>
+        <a class="button" href="{{ url_for('shop.detail', slug='gainz-lab-pre-ignite') }}">View Details</a>
+      </div>
+    </article>
+    <article class="merch-card">
+      <img src="{{ url_for('static', filename='img/products/gainz-lab-starter-stack.jpg') }}" alt="GAINZ LAB Starter Stack">
+      <div class="merch-card__body">
+        <p class="card__label">Bundle</p>
+        <h3>GAINZ LAB Starter Stack</h3>
+        <p>Bundles add retail variety and give presenters a stronger upsell story inside the catalog.</p>
+        <a class="button" href="{{ url_for('shop.detail', slug='gainz-lab-starter-stack') }}">View Details</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="store-section store-section--dark">
+  <div class="store-banner">
+    <div class="store-banner__copy">
+      <p class="eyebrow">Why GAINZ LAB</p>
+      <h2>Premium, fast, and easy to present live.</h2>
+      <p>
+        The redesigned storefront keeps product discovery, detail viewing, cart flow, and admin
+        walkthroughs visually connected without copying another store one-to-one.
+      </p>
+      <div class="store-banner__actions">
+        <a class="button" href="{{ url_for('shop.index') }}">Shop Now</a>
+        <a class="button button--ghost" href="{{ url_for('main.categories') }}">Browse Categories</a>
+      </div>
+    </div>
+    <div class="store-banner__stats">
+      <article>
+        <strong>11</strong>
+        <span>Active products</span>
+      </article>
+      <article>
+        <strong>6</strong>
+        <span>Core categories</span>
+      </article>
+      <article>
+        <strong>3</strong>
+        <span>Demo-ready orders</span>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}

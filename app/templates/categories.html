@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="shop-stage shop-stage--categories">
+  <div class="shop-stage__copy">
+    <p class="eyebrow">Categories</p>
+    <h1>Build the stack by training goal.</h1>
+    <p>
+      Move straight into protein, pre-workout, creatine, recovery, bundles, and accessories from
+      one merchandised category hub.
+    </p>
+  </div>
+  <aside class="shop-stage__panel">
+    <article class="shop-stage__metric">
+      <strong>6</strong>
+      <span>Category lanes</span>
+    </article>
+    <article class="shop-stage__metric">
+      <strong>11</strong>
+      <span>Active products</span>
+    </article>
+    <article class="shop-stage__metric">
+      <strong>1</strong>
+      <span>Fast route to shop</span>
+    </article>
+  </aside>
+</section>
+
+<section class="store-category-grid store-category-grid--page">
+  {% for category in preferred_categories %}
+  <article class="store-category-card store-category-card--page">
+    <p class="card__label">{{ '%02d'|format(loop.index) }}</p>
+    <h2>{{ category.name }}</h2>
+    <p>{{ category.summary }}</p>
+    <a class="button button--ghost" href="{{ url_for('shop.index', category=category.slug) }}">Browse {{ category.name }}</a>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}

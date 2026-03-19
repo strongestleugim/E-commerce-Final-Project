@@ -1,0 +1,88 @@
+<article class="card cart-item">
+  <div class="cart-item__media">
+    <img
+      class="cart-item__image"
+      src="{{ url_for('static', filename=line.item.product.image_path or 'img/products/protein-placeholder.svg') }}"
+      alt="{{ line.item.product.name }}"
+      loading="lazy"
+    >
+  </div>
+
+  <div class="cart-item__content">
+    <div class="cart-item__header">
+      <div class="cart-item__copy">
+        <div class="product-card__meta">
+          <span class="product-chip">{{ line.item.product.category.name }}</span>
+          {% if line.item.product.is_active %}
+          <span class="stock-badge">Stock - {{ line.item.product.stock }}</span>
+          {% else %}
+          <span class="stock-badge stock-badge--out">Unavailable</span>
+          {% endif %}
+        </div>
+        <h2>
+          {% if line.item.product.is_active %}
+          <a href="{{ url_for('shop.detail', slug=line.item.product.slug) }}">{{ line.item.product.name }}</a>
+          {% else %}
+          {{ line.item.product.name }}
+          {% endif %}
+        </h2>
+        <p>{{ line.item.product.short_description }}</p>
+      </div>
+
+      <div class="cart-item__pricing">
+        <span class="card__label">Unit Price</span>
+        <strong>PHP {{ line.unit_price }}</strong>
+      </div>
+    </div>
+
+    <dl class="product-card__details cart-item__details">
+      <div>
+        <dt>Variant</dt>
+        <dd>{{ line.item.product.flavor_or_variant or "Core Formula" }}</dd>
+      </div>
+      <div>
+        <dt>Size</dt>
+        <dd>{{ line.item.product.size_or_weight or "Standard" }}</dd>
+      </div>
+    </dl>
+
+    <div class="cart-item__footer">
+      <form
+        class="cart-update-form"
+        method="post"
+        action="{{ url_for('cart.update', item_id=line.item.id) }}"
+      >
+        <input type="hidden" name="next" value="{{ url_for('cart.index') }}">
+        <label class="field cart-update-form__field">
+          <span class="field__label">Quantity</span>
+          <input
+            class="field__input cart-update-form__input"
+            type="number"
+            name="quantity"
+            value="{{ line.item.quantity }}"
+            min="1"
+            max="{{ line.item.product.stock if line.item.product.stock > 0 else 1 }}"
+            {% if not line.item.product.is_active or line.item.product.stock < 1 %}disabled{% endif %}
+          >
+        </label>
+        <button
+          class="button button--outline cart-update-form__button"
+          type="submit"
+          {% if not line.item.product.is_active or line.item.product.stock < 1 %}disabled aria-disabled="true"{% endif %}
+        >
+          Update
+        </button>
+      </form>
+
+      <form method="post" action="{{ url_for('cart.remove', item_id=line.item.id) }}">
+        <input type="hidden" name="next" value="{{ url_for('cart.index') }}">
+        <button class="button button--ghost" type="submit">Remove</button>
+      </form>
+
+      <div class="cart-item__line-total">
+        <span class="card__label">Line Total</span>
+        <strong>PHP {{ line.line_total }}</strong>
+      </div>
+    </div>
+  </div>
+</article>

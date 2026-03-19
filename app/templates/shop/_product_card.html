@@ -1,0 +1,70 @@
+<article class="product-card product-card--store">
+  <a class="product-card__media" href="{{ url_for('shop.detail', slug=product.slug) }}">
+    <span class="product-card__media-label">{{ product.category.name }}</span>
+    <img
+      class="product-card__image"
+      src="{{ url_for('static', filename=product.image_path or 'img/products/protein-placeholder.svg') }}"
+      alt="{{ product.name }}"
+      loading="lazy"
+    >
+  </a>
+
+  <div class="product-card__body">
+    <div class="product-card__headline">
+      <div>
+        <p class="card__label">{{ product.flavor_or_variant or "Core Formula" }}</p>
+        <h3>{{ product.name }}</h3>
+      </div>
+      <p class="product-card__price">PHP {{ product.price }}</p>
+    </div>
+
+    <div class="product-card__copy">
+      <p class="product-card__description">{{ product.short_description }}</p>
+    </div>
+
+    <div class="product-card__quick-specs">
+      <span>{{ product.size_or_weight or "Standard" }}</span>
+      {% if product.stock > 20 %}
+      <span>Ready To Ship</span>
+      {% elif product.stock > 0 %}
+      <span>Low Stock</span>
+      {% else %}
+      <span>Out Of Stock</span>
+      {% endif %}
+    </div>
+
+    <dl class="product-card__details">
+      <div>
+        <dt>Category</dt>
+        <dd>{{ product.category.name }}</dd>
+      </div>
+      <div>
+        <dt>Variant</dt>
+        <dd>{{ product.flavor_or_variant or "Core Formula" }}</dd>
+      </div>
+      <div>
+        <dt>Size</dt>
+        <dd>{{ product.size_or_weight or "Standard" }}</dd>
+      </div>
+      <div>
+        <dt>Stock</dt>
+        <dd>{{ product.stock }} available</dd>
+      </div>
+    </dl>
+
+    <div class="product-card__meta">
+      {% if product.stock > 20 %}
+      <span class="stock-badge">In Stock - {{ product.stock }}</span>
+      {% elif product.stock > 0 %}
+      <span class="stock-badge stock-badge--low">Low Stock - {{ product.stock }}</span>
+      {% else %}
+      <span class="stock-badge stock-badge--out">Out of Stock</span>
+      {% endif %}
+    </div>
+
+    <div class="product-card__actions">
+      <a class="button" href="{{ url_for('shop.detail', slug=product.slug) }}">View Details</a>
+      <a class="button button--ghost" href="{{ url_for('shop.index', category=product.category.slug) }}">Browse Category</a>
+    </div>
+  </div>
+</article>

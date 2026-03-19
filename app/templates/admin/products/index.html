@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header page-header--split">
+  <div>
+    <p class="eyebrow">Admin Products</p>
+    <h1>Product management</h1>
+    <p>Create, review, edit, and control product visibility without deleting catalog records.</p>
+  </div>
+  <a class="button" href="{{ url_for('admin.product_create') }}">New Product</a>
+</section>
+
+{% include "admin/_nav.html" %}
+
+{% if products %}
+<section class="card admin-table-shell">
+  <div class="admin-table-shell__header">
+    <div>
+      <p class="card__label">Catalog Table</p>
+      <h2>{{ products|length }} products</h2>
+    </div>
+  </div>
+
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th scope="col">Image</th>
+          <th scope="col">Product</th>
+          <th scope="col">Category</th>
+          <th scope="col">Price</th>
+          <th scope="col">Stock</th>
+          <th scope="col">Status</th>
+          <th scope="col">Updated</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+        <tr>
+          <td>
+            <img
+              class="admin-table__image"
+              src="{{ url_for('static', filename=product.image_path or 'img/products/protein-placeholder.svg') }}"
+              alt="{{ product.name }}"
+            >
+          </td>
+          <td>
+            <div class="admin-table__copy">
+              <strong>{{ product.name }}</strong>
+              <span>{{ product.slug }}</span>
+            </div>
+          </td>
+          <td>{{ product.category.name }}</td>
+          <td>PHP {{ product.price }}</td>
+          <td>{{ product.stock }}</td>
+          <td>
+            {% if product.is_active %}
+            <span class="stock-badge">Active</span>
+            {% else %}
+            <span class="stock-badge stock-badge--out">Inactive</span>
+            {% endif %}
+          </td>
+          <td>{{ product.updated_at.strftime('%b %d, %Y') }}</td>
+          <td>
+            <div class="admin-action-row">
+              <a class="button button--outline" href="{{ url_for('admin.product_detail', product_id=product.id) }}">View</a>
+              <a class="button button--ghost" href="{{ url_for('admin.product_edit', product_id=product.id) }}">Edit</a>
+              <form method="post" action="{{ url_for('admin.product_toggle_status', product_id=product.id) }}">
+                <input type="hidden" name="next" value="{{ url_for('admin.products') }}">
+                <button class="button button--ghost" type="submit">
+                  {% if product.is_active %}Deactivate{% else %}Reactivate{% endif %}
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% else %}
+<section class="card catalog-empty">
+  <p class="card__label">No Products Yet</p>
+  <h2>The product catalog is empty.</h2>
+  <p>Create the first GAINZ LAB product to populate the storefront and admin overview.</p>
+  <div class="catalog-empty__actions">
+    <a class="button" href="{{ url_for('admin.product_create') }}">Create Product</a>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

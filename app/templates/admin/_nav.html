@@ -1,0 +1,7 @@
+<nav class="admin-nav pill-row" aria-label="Admin navigation">
+  <a class="pill{% if request.endpoint == 'admin.dashboard' %} pill--active{% endif %}" href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+  <a class="pill{% if request.endpoint in ['admin.products', 'admin.product_create', 'admin.product_detail', 'admin.product_edit'] %} pill--active{% endif %}" href="{{ url_for('admin.products') }}">Products</a>
+  <a class="pill{% if request.endpoint in ['admin.categories', 'admin.category_create', 'admin.category_edit'] %} pill--active{% endif %}" href="{{ url_for('admin.categories') }}">Categories</a>
+  <a class="pill{% if request.endpoint in ['admin.orders', 'admin.order_detail', 'admin.order_update_status', 'admin.order_update_payment_status'] %} pill--active{% endif %}" href="{{ url_for('admin.orders') }}">Orders</a>
+  <a class="pill{% if request.endpoint == 'admin.users' %} pill--active{% endif %}" href="{{ url_for('admin.users') }}">Users</a>
+</nav>

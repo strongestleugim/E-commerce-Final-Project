@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header page-header--split">
+  <div>
+    <p class="eyebrow">Shopping Cart</p>
+    <h1>Your GAINZ LAB stack</h1>
+    <p>Review quantities, confirm stock, and continue when your cart is dialed in.</p>
+  </div>
+  <a class="button button--ghost" href="{{ url_for('shop.index') }}">Continue Shopping</a>
+</section>
+
+{% if not cart.cart_ready %}
+<section class="card catalog-empty">
+  <p class="card__label">Cart Unavailable</p>
+  <h2>The cart is not ready yet.</h2>
+  <p>Initialize the database before using the customer cart flow.</p>
+</section>
+{% elif cart.is_empty %}
+<section class="card catalog-empty">
+  <p class="card__label">Empty Cart</p>
+  <h2>No products in your cart yet.</h2>
+  <p>
+    Add products from the GAINZ LAB catalog to build your stack before moving on to checkout.
+  </p>
+  <div class="catalog-empty__actions">
+    <a class="button" href="{{ url_for('shop.index') }}">Browse the Shop</a>
+    <a class="button button--ghost" href="{{ url_for('main.categories') }}">View Categories</a>
+  </div>
+</section>
+{% else %}
+<section class="cart-layout">
+  <div class="cart-items">
+    {% for line in cart.lines %}
+      {% include "cart/_cart_item.html" %}
+    {% endfor %}
+  </div>
+
+  <aside class="card cart-summary">
+    <p class="card__label">Summary</p>
+    <h2>Cart subtotal</h2>
+    <dl class="cart-summary__rows">
+      <div>
+        <dt>Total Items</dt>
+        <dd>{{ cart.total_quantity }}</dd>
+      </div>
+      <div>
+        <dt>Subtotal</dt>
+        <dd>PHP {{ cart.subtotal }}</dd>
+      </div>
+    </dl>
+    <p>
+      Shipping method and payment selection happen in the next step. Stock is checked here before
+      checkout.
+    </p>
+    <a class="button" href="{{ url_for('checkout.index') }}">Proceed to Checkout</a>
+  </aside>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card catalog-empty">
+  <p class="card__label">Order Not Found</p>
+  <h1>This order is not available.</h1>
+  <p>
+    The requested order may not exist or may not belong to the current signed-in account.
+    Requested order number: <code>{{ missing_order_number }}</code>
+  </p>
+  <div class="catalog-empty__actions">
+    <a class="button" href="{{ url_for('orders.index') }}">Back to Orders</a>
+    <a class="button button--ghost" href="{{ url_for('shop.index') }}">Browse Products</a>
+  </div>
+</section>
+{% endblock %}

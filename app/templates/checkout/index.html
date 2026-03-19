@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header page-header--split">
+  <div>
+    <p class="eyebrow">Checkout</p>
+    <h1>Finalize your order</h1>
+    <p>Review delivery details, choose a simulated payment method, and place your GAINZ LAB order.</p>
+  </div>
+  <a class="button button--ghost" href="{{ url_for('cart.index') }}">Back to Cart</a>
+</section>
+
+{% if not cart.cart_ready %}
+<section class="card catalog-empty">
+  <p class="card__label">Checkout Unavailable</p>
+  <h2>The database is not ready yet.</h2>
+  <p>Initialize the app database before using checkout.</p>
+</section>
+{% elif cart.is_empty %}
+<section class="card catalog-empty">
+  <p class="card__label">Empty Cart</p>
+  <h2>Your cart is empty.</h2>
+  <p>Add products to your cart before continuing to checkout.</p>
+  <div class="catalog-empty__actions">
+    <a class="button" href="{{ url_for('shop.index') }}">Browse the Shop</a>
+    <a class="button button--ghost" href="{{ url_for('cart.index') }}">Return to Cart</a>
+  </div>
+</section>
+{% else %}
+<section class="checkout-layout">
+  <form class="card checkout-form" method="post" action="{{ url_for('checkout.index') }}">
+    <div class="checkout-form__header">
+      <div>
+        <p class="card__label">Customer Details</p>
+        <h2>Delivery and contact</h2>
+      </div>
+      <p>All payments are simulated for this academic/demo store.</p>
+    </div>
+
+    {% if errors.form %}
+    <div class="alert alert--error">{{ errors.form }}</div>
+    {% endif %}
+
+    <label class="field">
+      <span class="field__label">Delivery Address</span>
+      <textarea
+        class="field__input field__input--textarea"
+        name="delivery_address"
+        rows="5"
+      >{{ form_data.delivery_address }}</textarea>
+      {% if errors.delivery_address %}
+      <span class="field__error">{{ errors.delivery_address }}</span>
+      {% endif %}
+    </label>
+
+    <label class="field">
+      <span class="field__label">Contact Number</span>
+      <input
+        class="field__input"
+        type="text"
+        name="contact_number"
+        value="{{ form_data.contact_number }}"
+        placeholder="+63 912 345 6789"
+      >
+      {% if errors.contact_number %}
+      <span class="field__error">{{ errors.contact_number }}</span>
+      {% endif %}
+    </label>
+
+    <section class="checkout-form__section">
+      <div class="checkout-form__section-heading">
+        <div>
+          <p class="card__label">Shipping</p>
+          <h3>Choose a shipping method</h3>
+        </div>
+        {% if errors.shipping_method %}
+        <span class="field__error">{{ errors.shipping_method }}</span>
+        {% endif %}
+      </div>
+      <div class="choice-list">
+        {% for option in shipping_options %}
+        <label class="choice-card">
+          <input
+            class="choice-card__input"
+            type="radio"
+            name="shipping_method"
+            value="{{ option.label }}"
+            {% if form_data.shipping_method == option.label %}checked{% endif %}
+          >
+          <span class="choice-card__body">
+            <strong>{{ option.label }}</strong>
+            <span>Fee: PHP {{ option.fee }}</span>
+          </span>
+        </label>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="checkout-form__section">
+      <div class="checkout-form__section-heading">
+        <div>
+          <p class="card__label">Payment</p>
+          <h3>Choose a payment method</h3>
+        </div>
+        {% if errors.payment_method %}
+        <span class="field__error">{{ errors.payment_method }}</span>
+        {% endif %}
+      </div>
+      <div class="choice-list">
+        {% for option in payment_options %}
+        <label class="choice-card">
+          <input
+            class="choice-card__input"
+            type="radio"
+            name="payment_method"
+            value="{{ option.label }}"
+            {% if form_data.payment_method == option.label %}checked{% endif %}
+          >
+          <span class="choice-card__body">
+            <strong>{{ option.label }}</strong>
+            <span>
+              {% if option.label == "Cash on Delivery" %}
+              Pay when the order arrives.
+              {% else %}
+              Simulated successful payment for the demo project.
+              {% endif %}
+            </span>
+          </span>
+        </label>
+        {% endfor %}
+      </div>
+    </section>
+
+    <button class="button checkout-form__submit" type="submit">Place Order</button>
+  </form>
+
+  <aside class="card checkout-summary">
+    <p class="card__label">Order Summary</p>
+    <h2>Checkout totals</h2>
+
+    <div class="checkout-summary__items">
+      {% for line in cart.lines %}
+      <article class="checkout-summary__item">
+        <div>
+          <strong>{{ line.item.product.name }}</strong>
+          <p>{{ line.item.quantity }} x PHP {{ line.unit_price }}</p>
+        </div>
+        <strong>PHP {{ line.line_total }}</strong>
+      </article>
+      {% endfor %}
+    </div>
+
+    <dl class="cart-summary__rows">
+      <div>
+        <dt>Subtotal</dt>
+        <dd>PHP {{ cart.subtotal }}</dd>
+      </div>
+      <div>
+        <dt>Shipping Fee</dt>
+        <dd>PHP {{ shipping_fee }}</dd>
+      </div>
+      <div>
+        <dt>Total Amount</dt>
+        <dd>PHP {{ total_amount }}</dd>
+      </div>
+    </dl>
+  </aside>
+</section>
+{% endif %}
+{% endblock %}

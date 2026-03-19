@@ -1,0 +1,40 @@
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <section>
+      <p class="site-footer__brand">{{ brand_name }}</p>
+      <p class="site-footer__copy">
+        Modern performance nutrition branding for lifters, athletes, and everyday grinders
+        training with purpose.
+      </p>
+      <ul class="footer-contact">
+        <li><span>Email</span> <a href="mailto:{{ brand_contact.email }}">{{ brand_contact.email }}</a></li>
+        <li><span>Phone</span> <a href="tel:{{ brand_contact.phone|replace(' ', '') }}">{{ brand_contact.phone }}</a></li>
+        <li><span>Location</span> {{ brand_contact.location }}</li>
+      </ul>
+    </section>
+
+    <nav class="footer-links" aria-label="Footer links">
+      <p class="footer-heading">Explore</p>
+      <a href="{{ url_for('main.home') }}">Home</a>
+      <a href="{{ url_for('shop.index') }}">Shop</a>
+      <a href="{{ url_for('main.categories') }}">Categories</a>
+      <a href="{{ url_for('cart.index') }}">Cart</a>
+      {% if current_user.is_authenticated %}
+      <a href="{{ url_for('account.profile') }}">Profile</a>
+      {% else %}
+      <a href="{{ url_for('auth.login') }}">Login</a>
+      {% endif %}
+    </nav>
+
+    <section class="footer-disclaimer">
+      <p class="footer-heading">Disclaimer</p>
+      <p>{{ demo_disclaimer }}</p>
+      <p class="footer-meta">&copy; {{ current_year }} {{ brand_name }}. Academic/demo use only.</p>
+      <p class="footer-meta">Shipping, payment, and fulfillment references are simulated for coursework.</p>
+    </section>
+  </div>
+  <div class="container site-footer__bottom">
+    <p>Built for a student final-project e-commerce showcase.</p>
+    <p>{{ brand_tagline }}</p>
+  </div>
+</footer>

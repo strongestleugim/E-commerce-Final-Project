@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header page-header--split">
+  <div>
+    <p class="eyebrow">Admin Products</p>
+    <h1>{{ product.name }}</h1>
+    <p>Review the stored product record, current visibility state, and editable catalog fields.</p>
+  </div>
+  <div class="pill-row">
+    <a class="button button--ghost" href="{{ url_for('admin.products') }}">Back to Products</a>
+    <a class="button" href="{{ url_for('admin.product_edit', product_id=product.id) }}">Edit Product</a>
+    {% if product.is_active %}
+    <a class="button button--outline" href="{{ url_for('shop.detail', slug=product.slug) }}">Public View</a>
+    {% endif %}
+  </div>
+</section>
+
+{% include "admin/_nav.html" %}
+
+<section class="product-layout product-layout--detail">
+  <div class="card product-media product-media--catalog">
+    <img
+      class="product-detail__image"
+      src="{{ url_for('static', filename=product.image_path or 'img/products/protein-placeholder.svg') }}"
+      alt="{{ product.name }}"
+    >
+  </div>
+
+  <div class="card product-detail__info">
+    <div class="product-card__meta">
+      <span class="product-chip">{{ product.category.name }}</span>
+      {% if product.is_active %}
+      <span class="stock-badge">Active</span>
+      {% else %}
+      <span class="stock-badge stock-badge--out">Inactive</span>
+      {% endif %}
+    </div>
+
+    <div class="product-detail__headline">
+      <p class="product-detail__price">PHP {{ product.price }}</p>
+      <p class="product-detail__lede">{{ product.short_description }}</p>
+    </div>
+
+    <dl class="product-card__details product-card__details--full">
+      <div>
+        <dt>Slug</dt>
+        <dd>{{ product.slug }}</dd>
+      </div>
+      <div>
+        <dt>Stock</dt>
+        <dd>{{ product.stock }}</dd>
+      </div>
+      <div>
+        <dt>Flavor / Variant</dt>
+        <dd>{{ product.flavor_or_variant or "Not set" }}</dd>
+      </div>
+      <div>
+        <dt>Size / Weight</dt>
+        <dd>{{ product.size_or_weight or "Not set" }}</dd>
+      </div>
+      <div>
+        <dt>Image Path</dt>
+        <dd>{{ product.image_path }}</dd>
+      </div>
+      <div>
+        <dt>Updated</dt>
+        <dd>{{ product.updated_at.strftime('%b %d, %Y %I:%M %p') }}</dd>
+      </div>
+    </dl>
+
+    <section class="product-detail__section">
+      <p class="card__label">Full Description</p>
+      <p>{{ product.full_description }}</p>
+    </section>
+
+    <section class="product-detail__section">
+      <p class="card__label">Visibility Control</p>
+      <form method="post" action="{{ url_for('admin.product_toggle_status', product_id=product.id) }}">
+        <input type="hidden" name="next" value="{{ url_for('admin.product_detail', product_id=product.id) }}">
+        <button class="button" type="submit">
+          {% if product.is_active %}Deactivate Product{% else %}Reactivate Product{% endif %}
+        </button>
+      </form>
+      <p class="product-detail__note">
+        Product status is soft-managed through the <code>is_active</code> field, so past orders and
+        admin history remain intact.
+      </p>
+    </section>
+  </div>
+</section>
+{% endblock %}

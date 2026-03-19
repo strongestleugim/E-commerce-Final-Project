@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+  <p class="eyebrow">Admin Categories</p>
+  <h1>Category not found</h1>
+  <p>The requested category record could not be located in the admin area.</p>
+</section>
+
+{% include "admin/_nav.html" %}
+
+<section class="card catalog-empty">
+  <p class="card__label">Missing Category</p>
+  <h2>No category matched this request.</h2>
+  <p>Requested category ID: <code>{{ missing_category_id }}</code></p>
+  <div class="catalog-empty__actions">
+    <a class="button" href="{{ url_for('admin.categories') }}">Back to Categories</a>
+    <a class="button button--ghost" href="{{ url_for('admin.category_create') }}">Create Category</a>
+  </div>
+</section>
+{% endblock %}

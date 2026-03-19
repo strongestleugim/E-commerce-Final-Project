@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header page-header--split">
+  <div>
+    <p class="eyebrow">Admin Orders</p>
+    <h1>{{ order.order_number }}</h1>
+    <p>Review customer, shipping, payment, and line-item details before updating the order state.</p>
+  </div>
+  <div class="pill-row">
+    <span class="pill">{{ order.payment_status }}</span>
+    <span class="pill">{{ order.order_status }}</span>
+    <a class="button button--ghost" href="{{ url_for('admin.orders') }}">Back to Orders</a>
+  </div>
+</section>
+
+{% include "admin/_nav.html" %}
+
+<section class="admin-order-layout">
+  <article class="card order-overview">
+    <p class="card__label">Order Summary</p>
+    <h2>{{ order.order_number }}</h2>
+
+    <dl class="order-meta">
+      <div>
+        <dt>Customer</dt>
+        <dd>{{ order.user.name }}</dd>
+      </div>
+      <div>
+        <dt>Email</dt>
+        <dd>{{ order.user.email }}</dd>
+      </div>
+      <div>
+        <dt>Contact Number</dt>
+        <dd>{{ order.contact_number }}</dd>
+      </div>
+      <div>
+        <dt>Shipping Method</dt>
+        <dd>{{ order.shipping_method }}</dd>
+      </div>
+      <div>
+        <dt>Payment Method</dt>
+        <dd>{{ order.payment_method }}</dd>
+      </div>
+      <div>
+        <dt>Payment Status</dt>
+        <dd>{{ order.payment_status }}</dd>
+      </div>
+      <div>
+        <dt>Order Status</dt>
+        <dd>{{ order.order_status }}</dd>
+      </div>
+      <div>
+        <dt>Placed</dt>
+        <dd>{{ order.placed_at.strftime('%b %d, %Y %I:%M %p') }}</dd>
+      </div>
+      <div>
+        <dt>Delivery Address</dt>
+        <dd>{{ order.delivery_address }}</dd>
+      </div>
+    </dl>
+
+    <dl class="cart-summary__rows">
+      <div>
+        <dt>Subtotal</dt>
+        <dd>PHP {{ order.subtotal }}</dd>
+      </div>
+      <div>
+        <dt>Shipping Fee</dt>
+        <dd>PHP {{ order.shipping_fee }}</dd>
+      </div>
+      <div>
+        <dt>Total Amount</dt>
+        <dd>PHP {{ order.total_amount }}</dd>
+      </div>
+    </dl>
+  </article>
+
+  <aside class="card admin-order-controls">
+    <div class="admin-form__header">
+      <div>
+        <p class="card__label">Order Controls</p>
+        <h2>Status updates</h2>
+      </div>
+    </div>
+
+    <form
+      class="admin-status-form"
+      method="post"
+      action="{{ url_for('admin.order_update_status', order_number=order.order_number) }}"
+    >
+      <input type="hidden" name="next" value="{{ url_for('admin.order_detail', order_number=order.order_number) }}">
+      <label class="field">
+        <span class="field__label">Order Status</span>
+        <select class="field__input" name="order_status">
+          {% for status in order_status_choices %}
+          <option value="{{ status }}" {% if status == order.order_status %}selected{% endif %}>{{ status }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button class="button" type="submit">Update Order Status</button>
+      <p class="field__hint">
+        Allowed next steps stay simple: pending orders can move forward or be cancelled, confirmed
+        orders can ship or cancel, and shipped orders can be marked delivered.
+      </p>
+    </form>
+
+    <form
+      class="admin-status-form"
+      method="post"
+      action="{{ url_for('admin.order_update_payment_status', order_number=order.order_number) }}"
+    >
+      <input type="hidden" name="next" value="{{ url_for('admin.order_detail', order_number=order.order_number) }}">
+      <label class="field">
+        <span class="field__label">Payment Status</span>
+        <select class="field__input" name="payment_status">
+          {% for status in payment_status_choices %}
+          <option value="{{ status }}" {% if status == order.payment_status %}selected{% endif %}>{{ status }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button class="button button--outline" type="submit">Update Payment Status</button>
+      <p class="field__hint">Payment status updates are optional but available when the admin needs them.</p>
+    </form>
+  </aside>
+</section>
+
+<section class="card order-items-panel">
+  <p class="card__label">Line Items</p>
+  <h2>{{ order.items|length }} line items</h2>
+  <div class="order-items">
+    {% for item in order.items %}
+    <article class="order-item">
+      <div>
+        <strong>{{ item.product_name_snapshot }}</strong>
+        <p>{{ item.quantity }} x PHP {{ item.price_snapshot }}</p>
+        {% if item.product %}
+        <p><a class="text-link" href="{{ url_for('admin.product_detail', product_id=item.product.id) }}">View product record</a></p>
+        {% endif %}
+      </div>
+      <strong>PHP {{ item.line_total }}</strong>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

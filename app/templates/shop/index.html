@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="shop-stage">
+  <div class="shop-stage__copy">
+    <p class="eyebrow">Shop</p>
+    <h1>Merchandised for fast product comparison.</h1>
+    <p>
+      Browse active GAINZ LAB formulas by category, search by name, and move from discovery to
+      product details without losing the premium retail feel.
+    </p>
+  </div>
+  <aside class="shop-stage__panel">
+    <article class="shop-stage__metric">
+      <strong>{% if catalog_ready %}{{ products|length }}{% else %}0{% endif %}</strong>
+      <span>Visible now</span>
+    </article>
+    <article class="shop-stage__metric">
+      <strong>{{ categories|length }}</strong>
+      <span>Active categories</span>
+    </article>
+    <article class="shop-stage__metric">
+      <strong>Search</strong>
+      <span>Name + category filters</span>
+    </article>
+  </aside>
+</section>
+
+<section class="card catalog-toolbar catalog-toolbar--store">
+  <div class="catalog-toolbar__intro">
+    <div>
+      <p class="card__label">Catalog Controls</p>
+      <h2>Find the right formula faster.</h2>
+    </div>
+    <p>Search by product name, narrow by category, and keep the product grid clean on every screen size.</p>
+  </div>
+  <form class="catalog-filter-form" method="get" action="{{ url_for('shop.index') }}">
+    <label class="field">
+      <span class="field__label">Search Products</span>
+      <input
+        class="field__input"
+        type="search"
+        name="q"
+        placeholder="Search by product name"
+        value="{{ filters.search_query }}"
+      >
+    </label>
+
+    <label class="field">
+      <span class="field__label">Category</span>
+      <select class="field__input" name="category">
+        <option value="">All categories</option>
+        {% for category in categories %}
+        <option value="{{ category.slug }}" {% if filters.category_slug == category.slug %}selected{% endif %}>
+          {{ category.name }} ({{ category.product_count }})
+        </option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <div class="catalog-filter-form__actions">
+      <button class="button" type="submit">Apply Filters</button>
+      {% if filters.has_filters %}
+      <a class="button button--ghost" href="{{ url_for('shop.index') }}">Clear</a>
+      {% endif %}
+    </div>
+  </form>
+</section>
+
+<section class="pill-row pill-row--catalog">
+  <a class="pill{% if not filters.category_slug %} pill--active{% endif %}" href="{{ url_for('shop.index', q=filters.search_query) }}">All</a>
+  {% for category in categories %}
+  <a
+    class="pill{% if filters.category_slug == category.slug %} pill--active{% endif %}"
+    href="{{ url_for('shop.index', category=category.slug, q=filters.search_query) }}"
+  >
+    {{ category.name }}
+  </a>
+  {% endfor %}
+</section>
+
+{% if not catalog_ready %}
+<section class="card catalog-empty">
+  <p class="card__label">Catalog Unavailable</p>
+  <h2>Database setup is still required.</h2>
+  <p>Run the database initialization and seed commands first so the product catalog has data to display.</p>
+</section>
+{% else %}
+<section class="catalog-summary">
+  <p>
+    Showing <strong>{{ products|length }}</strong> active product{% if products|length != 1 %}s{% endif %}
+    {% if selected_category %}in <strong>{{ selected_category.name }}</strong>{% endif %}
+    {% if filters.search_query %}matching <strong>"{{ filters.search_query }}"</strong>{% endif %}.
+  </p>
+</section>
+
+{% if products %}
+<section class="catalog-grid" aria-label="Product catalog">
+  {% for product in products %}
+    {% include "shop/_product_card.html" %}
+  {% endfor %}
+</section>
+{% else %}
+<section class="card catalog-empty">
+  <p class="card__label">No Matches</p>
+  <h2>No active products match your filters.</h2>
+  <p>
+    Try a different product name or clear the category filter to see the full GAINZ LAB lineup.
+  </p>
+  <div class="catalog-empty__actions">
+    <a class="button" href="{{ url_for('shop.index') }}">View All Products</a>
+    <a class="button button--ghost" href="{{ url_for('main.categories') }}">Browse Categories</a>
+  </div>
+</section>
+{% endif %}
+{% endif %}
+{% endblock %}

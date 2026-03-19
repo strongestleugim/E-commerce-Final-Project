@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+  <p class="eyebrow">Authentication</p>
+  <h1>Login</h1>
+  <p>
+    Sign in with your existing GAINZ LAB account to access your profile, order history,
+    and any protected pages you were trying to reach.
+  </p>
+</section>
+
+<section class="card auth-card">
+  <p class="card__label">Account Access</p>
+  <h2>Welcome back</h2>
+  {% if errors.get("form") %}
+  <div class="alert alert--error">{{ errors["form"] }}</div>
+  {% endif %}
+
+  <form class="auth-form" method="post" novalidate>
+    <input type="hidden" name="next" value="{{ form_data.next }}">
+
+    <label class="field">
+      <span class="field__label">Email</span>
+      <input
+        class="field__input"
+        type="email"
+        name="email"
+        value="{{ form_data.email }}"
+        autocomplete="email"
+        required
+      >
+      {% if errors.get("email") %}
+      <span class="field__error">{{ errors["email"] }}</span>
+      {% endif %}
+    </label>
+
+    <label class="field">
+      <span class="field__label">Password</span>
+      <input
+        class="field__input"
+        type="password"
+        name="password"
+        autocomplete="current-password"
+        required
+      >
+      {% if errors.get("password") %}
+      <span class="field__error">{{ errors["password"] }}</span>
+      {% endif %}
+    </label>
+
+    <button class="button auth-form__submit" type="submit">Login</button>
+  </form>
+
+  <p class="auth-meta">
+    Need an account?
+    <a class="text-link" href="{{ url_for('auth.register', next=form_data.next) }}">Create one here</a>
+  </p>
+</section>
+{% endblock %}

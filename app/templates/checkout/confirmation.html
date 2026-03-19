@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header page-header--split">
+  <div>
+    <p class="eyebrow">Order Confirmation</p>
+    <h1>Order placed successfully</h1>
+    <p>Your GAINZ LAB order has been recorded and the cart has been cleared.</p>
+  </div>
+  <div class="pill-row">
+    <span class="pill">Order {{ order.order_number }}</span>
+    <span class="pill">Status {{ order.order_status }}</span>
+  </div>
+</section>
+
+{% include "orders/_order_panels.html" %}
+
+<section class="section">
+  <div class="catalog-empty__actions">
+    <a class="button" href="{{ url_for('orders.detail', order_number=order.order_number) }}">View Order Details</a>
+    <a class="button button--ghost" href="{{ url_for('shop.index') }}">Continue Shopping</a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+  <p class="eyebrow">Authentication</p>
+  <h1>Create account</h1>
+  <p>
+    Register as a customer to manage your account, track orders, and move through protected
+    customer pages once storefront logic is connected.
+  </p>
+</section>
+
+<section class="card auth-card">
+  <p class="card__label">Customer Registration</p>
+  <h2>Build your account</h2>
+  {% if errors.get("form") %}
+  <div class="alert alert--error">{{ errors["form"] }}</div>
+  {% endif %}
+
+  <form class="auth-form" method="post" novalidate>
+    <input type="hidden" name="next" value="{{ form_data.next }}">
+
+    <label class="field">
+      <span class="field__label">Full name</span>
+      <input
+        class="field__input"
+        type="text"
+        name="name"
+        value="{{ form_data.name }}"
+        autocomplete="name"
+        required
+      >
+      {% if errors.get("name") %}
+      <span class="field__error">{{ errors["name"] }}</span>
+      {% endif %}
+    </label>
+
+    <label class="field">
+      <span class="field__label">Email</span>
+      <input
+        class="field__input"
+        type="email"
+        name="email"
+        value="{{ form_data.email }}"
+        autocomplete="email"
+        required
+      >
+      {% if errors.get("email") %}
+      <span class="field__error">{{ errors["email"] }}</span>
+      {% endif %}
+    </label>
+
+    <label class="field">
+      <span class="field__label">Password</span>
+      <input
+        class="field__input"
+        type="password"
+        name="password"
+        autocomplete="new-password"
+        required
+      >
+      {% if errors.get("password") %}
+      <span class="field__error">{{ errors["password"] }}</span>
+      {% endif %}
+    </label>
+
+    <label class="field">
+      <span class="field__label">Confirm password</span>
+      <input
+        class="field__input"
+        type="password"
+        name="confirm_password"
+        autocomplete="new-password"
+        required
+      >
+      {% if errors.get("confirm_password") %}
+      <span class="field__error">{{ errors["confirm_password"] }}</span>
+      {% endif %}
+    </label>
+
+    <button class="button auth-form__submit" type="submit">Register</button>
+  </form>
+
+  <p class="auth-meta">
+    Already registered?
+    <a class="text-link" href="{{ url_for('auth.login', next=form_data.next) }}">Login instead</a>
+  </p>
+</section>
+{% endblock %}

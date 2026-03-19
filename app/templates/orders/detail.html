@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header page-header--split">
+  <div>
+    <p class="eyebrow">Order Details</p>
+    <h1>{{ order.order_number }}</h1>
+    <p>Review your saved order details, totals, delivery information, and current status.</p>
+  </div>
+  <div class="pill-row">
+    <span class="pill">{{ order.order_status }}</span>
+    <span class="pill">{{ order.payment_status }}</span>
+    <a class="button button--ghost" href="{{ url_for('orders.index') }}">Back to Orders</a>
+  </div>
+</section>
+
+{% include "orders/_order_panels.html" %}
+{% endblock %}

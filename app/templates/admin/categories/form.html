@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header page-header--split">
+  <div>
+    <p class="eyebrow">Admin Categories</p>
+    <h1>{% if mode == "create" %}Create category{% else %}Edit category{% endif %}</h1>
+    <p>Keep category labels clean and stable so products remain organized across the storefront.</p>
+  </div>
+  <a class="button button--ghost" href="{{ url_for('admin.categories') }}">Back to Categories</a>
+</section>
+
+{% include "admin/_nav.html" %}
+
+<section class="admin-product-layout">
+  <form
+    class="card admin-form"
+    method="post"
+    action="{% if category %}{{ url_for('admin.category_edit', category_id=category.id) }}{% else %}{{ url_for('admin.category_create') }}{% endif %}"
+  >
+    <input type="hidden" name="next" value="{{ url_for('admin.categories') }}">
+
+    <div class="admin-form__header">
+      <div>
+        <p class="card__label">Category Form</p>
+        <h2>{% if mode == "create" %}New category{% else %}Update category{% endif %}</h2>
+      </div>
+      <span class="product-chip">{{ usage_count }} linked products</span>
+    </div>
+
+    <label class="field">
+      <span class="field__label">Category Name</span>
+      <input class="field__input" type="text" name="name" value="{{ form_data.name }}">
+      {% if errors.name %}
+      <span class="field__error">{{ errors.name }}</span>
+      {% endif %}
+    </label>
+
+    <label class="field">
+      <span class="field__label">Slug</span>
+      <input class="field__input" type="text" name="slug" value="{{ form_data.slug }}">
+      <span class="field__hint">Leave this blank to generate a slug from the category name.</span>
+      {% if errors.slug %}
+      <span class="field__error">{{ errors.slug }}</span>
+      {% endif %}
+    </label>
+
+    <label class="field">
+      <span class="field__label">Description</span>
+      <textarea class="field__input field__input--textarea" name="description" rows="5">{{ form_data.description }}</textarea>
+      {% if errors.description %}
+      <span class="field__error">{{ errors.description }}</span>
+      {% endif %}
+    </label>
+
+    <div class="admin-form__actions">
+      <button class="button" type="submit">
+        {% if mode == "create" %}Create Category{% else %}Save Changes{% endif %}
+      </button>
+      <a class="button button--ghost" href="{{ url_for('admin.categories') }}">Cancel</a>
+    </div>
+  </form>
+
+  <aside class="card admin-product-preview">
+    <p class="card__label">Relationship Safety</p>
+    <h2>Stable category records</h2>
+    <p>
+      Categories are managed by editing the existing record instead of deleting it. That keeps
+      linked products attached to the same category ID and avoids broken product relationships.
+    </p>
+    <dl class="detail-list">
+      <div>
+        <dt>Linked Products</dt>
+        <dd>{{ usage_count }}</dd>
+      </div>
+      <div>
+        <dt>Mode</dt>
+        <dd>{% if mode == "create" %}Create{% else %}Edit{% endif %}</dd>
+      </div>
+      {% if category %}
+      <div>
+        <dt>Current Slug</dt>
+        <dd>{{ category.slug }}</dd>
+      </div>
+      {% endif %}
+    </dl>
+  </aside>
+</section>
+{% endblock %}

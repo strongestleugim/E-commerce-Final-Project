@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header page-header--split">
+  <div>
+    <p class="eyebrow">Admin Categories</p>
+    <h1>Category management</h1>
+    <p>Create and update category records while keeping linked products intact.</p>
+  </div>
+  <a class="button" href="{{ url_for('admin.category_create') }}">New Category</a>
+</section>
+
+{% include "admin/_nav.html" %}
+
+{% if category_rows %}
+<section class="card admin-table-shell">
+  <div class="admin-table-shell__header">
+    <div>
+      <p class="card__label">Category Table</p>
+      <h2>{{ category_rows|length }} categories</h2>
+    </div>
+    <p>Usage count shows how many products are currently linked to each category.</p>
+  </div>
+
+  <div class="admin-table-wrap">
+    <table class="admin-table admin-table--compact">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Slug</th>
+          <th scope="col">Description</th>
+          <th scope="col">Usage</th>
+          <th scope="col">Updated</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in category_rows %}
+        <tr>
+          <td>
+            <div class="admin-table__copy">
+              <strong>{{ row.category.name }}</strong>
+            </div>
+          </td>
+          <td>{{ row.category.slug }}</td>
+          <td>{{ row.category.description or "No description yet." }}</td>
+          <td>
+            <span class="product-chip">{{ row.usage_count }} products</span>
+          </td>
+          <td>{{ row.category.updated_at.strftime('%b %d, %Y') }}</td>
+          <td>
+            <div class="admin-action-row">
+              <a class="button button--ghost" href="{{ url_for('admin.category_edit', category_id=row.category.id) }}">Edit</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% else %}
+<section class="card catalog-empty">
+  <p class="card__label">No Categories Yet</p>
+  <h2>The catalog has no categories.</h2>
+  <p>Create your first category before adding products to the storefront.</p>
+  <div class="catalog-empty__actions">
+    <a class="button" href="{{ url_for('admin.category_create') }}">Create Category</a>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

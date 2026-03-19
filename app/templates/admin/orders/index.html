@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+  <p class="eyebrow">Admin Orders</p>
+  <h1>Order management</h1>
+  <p>Review all customer orders, payment states, and fulfillment progress in one place.</p>
+</section>
+
+{% include "admin/_nav.html" %}
+
+{% if orders %}
+<section class="card admin-table-shell">
+  <div class="admin-table-shell__header">
+    <div>
+      <p class="card__label">Order Table</p>
+      <h2>{{ orders|length }} orders</h2>
+    </div>
+  </div>
+
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th scope="col">Order</th>
+          <th scope="col">Customer</th>
+          <th scope="col">Date</th>
+          <th scope="col">Total</th>
+          <th scope="col">Payment Method</th>
+          <th scope="col">Payment Status</th>
+          <th scope="col">Order Status</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td>
+            <div class="admin-table__copy">
+              <strong>{{ order.order_number }}</strong>
+              <span>{{ order.items|length }} line items</span>
+            </div>
+          </td>
+          <td>
+            <div class="admin-table__copy">
+              <strong>{{ order.user.name }}</strong>
+              <span>{{ order.user.email }}</span>
+            </div>
+          </td>
+          <td>{{ order.placed_at.strftime('%b %d, %Y %I:%M %p') }}</td>
+          <td>PHP {{ order.total_amount }}</td>
+          <td>{{ order.payment_method }}</td>
+          <td>
+            <span class="product-chip">{{ order.payment_status }}</span>
+          </td>
+          <td>
+            {% if order.order_status == "Cancelled" %}
+            <span class="stock-badge stock-badge--out">{{ order.order_status }}</span>
+            {% elif order.order_status == "Pending" %}
+            <span class="stock-badge stock-badge--low">{{ order.order_status }}</span>
+            {% else %}
+            <span class="stock-badge">{{ order.order_status }}</span>
+            {% endif %}
+          </td>
+          <td>
+            <div class="admin-action-row">
+              <a class="button button--outline" href="{{ url_for('admin.order_detail', order_number=order.order_number) }}">View Order</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% else %}
+<section class="card catalog-empty">
+  <p class="card__label">No Orders Yet</p>
+  <h2>No customer orders have been placed.</h2>
+  <p>Orders will appear here after customers complete checkout.</p>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,64 @@
+<section class="order-layout">
+  <article class="card order-overview">
+    <p class="card__label">Order Summary</p>
+    <h2>{{ order.order_number }}</h2>
+
+    <dl class="order-meta">
+      <div>
+        <dt>Status</dt>
+        <dd>{{ order.order_status }}</dd>
+      </div>
+      <div>
+        <dt>Payment</dt>
+        <dd>{{ order.payment_method }} - {{ order.payment_status }}</dd>
+      </div>
+      <div>
+        <dt>Shipping</dt>
+        <dd>{{ order.shipping_method }}</dd>
+      </div>
+      <div>
+        <dt>Placed</dt>
+        <dd>{{ order.placed_at.strftime('%b %d, %Y %I:%M %p') }}</dd>
+      </div>
+      <div>
+        <dt>Contact Number</dt>
+        <dd>{{ order.contact_number }}</dd>
+      </div>
+      <div>
+        <dt>Delivery Address</dt>
+        <dd>{{ order.delivery_address }}</dd>
+      </div>
+    </dl>
+
+    <dl class="cart-summary__rows">
+      <div>
+        <dt>Subtotal</dt>
+        <dd>PHP {{ order.subtotal }}</dd>
+      </div>
+      <div>
+        <dt>Shipping Fee</dt>
+        <dd>PHP {{ order.shipping_fee }}</dd>
+      </div>
+      <div>
+        <dt>Total Amount</dt>
+        <dd>PHP {{ order.total_amount }}</dd>
+      </div>
+    </dl>
+  </article>
+
+  <article class="card order-items-panel">
+    <p class="card__label">Order Items</p>
+    <h2>{{ order.items|length }} line items</h2>
+    <div class="order-items">
+      {% for item in order.items %}
+      <article class="order-item">
+        <div>
+          <strong>{{ item.product_name_snapshot }}</strong>
+          <p>{{ item.quantity }} x PHP {{ item.price_snapshot }}</p>
+        </div>
+        <strong>PHP {{ item.line_total }}</strong>
+      </article>
+      {% endfor %}
+    </div>
+  </article>
+</section>

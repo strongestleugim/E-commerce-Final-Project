@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="detail-stage">
+  <div class="detail-stage__visual">
+    <div class="detail-stage__topline">
+      <a class="text-link" href="{{ url_for('shop.index') }}">Back to Shop</a>
+      <a class="text-link" href="{{ url_for('shop.index', category=product.category.slug) }}">More {{ product.category.name }}</a>
+    </div>
+    <div class="detail-stage__media-shell">
+      <span class="detail-stage__media-label">{{ product.category.name }}</span>
+      <img
+        class="product-detail__image"
+        src="{{ url_for('static', filename=product.image_path or 'img/products/protein-placeholder.svg') }}"
+        alt="{{ product.name }}"
+      >
+    </div>
+    <div class="detail-stage__spec-strip">
+      <article>
+        <span>Variant</span>
+        <strong>{{ product.flavor_or_variant or "Core Formula" }}</strong>
+      </article>
+      <article>
+        <span>Size</span>
+        <strong>{{ product.size_or_weight or "Standard" }}</strong>
+      </article>
+      <article>
+        <span>Stock</span>
+        <strong>{{ product.stock }} available</strong>
+      </article>
+    </div>
+  </div>
+
+  <div class="detail-stage__content">
+    <p class="eyebrow">Product Details</p>
+    <h1>{{ product.name }}</h1>
+    <div class="detail-stage__price-row">
+      <p class="product-detail__price">PHP {{ product.price }}</p>
+      {% if product.stock > 20 %}
+      <span class="stock-badge">In Stock - {{ product.stock }}</span>
+      {% elif product.stock > 0 %}
+      <span class="stock-badge stock-badge--low">Low Stock - {{ product.stock }}</span>
+      {% else %}
+      <span class="stock-badge stock-badge--out">Out of Stock</span>
+      {% endif %}
+    </div>
+    <p class="detail-stage__lead">{{ product.short_description }}</p>
+
+    <div class="detail-stage__assurance">
+      <span>Supports performance</span>
+      <span>Premium supplement presentation</span>
+      <span>Demo-ready checkout flow</span>
+    </div>
+
+    <dl class="product-card__details product-card__details--full detail-stage__details">
+      <div>
+        <dt>Category</dt>
+        <dd>{{ product.category.name }}</dd>
+      </div>
+      <div>
+        <dt>Flavor / Variant</dt>
+        <dd>{{ product.flavor_or_variant or "Core Formula" }}</dd>
+      </div>
+      <div>
+        <dt>Size / Weight</dt>
+        <dd>{{ product.size_or_weight or "Standard" }}</dd>
+      </div>
+      <div>
+        <dt>Stock</dt>
+        <dd>{{ product.stock }} available</dd>
+      </div>
+    </dl>
+
+    <section class="card detail-stage__purchase">
+      <p class="card__label">Purchase Panel</p>
+      <h2>Add this formula to your stack.</h2>
+      <p class="product-detail__note">
+        Quantity updates and stock validation continue in the cart before checkout is completed.
+      </p>
+      {% if product.stock > 0 and current_user.is_authenticated and not current_user.is_admin %}
+      <form class="quantity-form" method="post" action="{{ url_for('cart.add') }}">
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        <input type="hidden" name="origin" value="{{ url_for('shop.detail', slug=product.slug) }}">
+        <input type="hidden" name="next" value="{{ url_for('cart.index') }}">
+
+        <label class="field quantity-form__field">
+          <span class="field__label">Quantity</span>
+          <input
+            class="field__input quantity-form__input"
+            type="number"
+            name="quantity"
+            value="1"
+            min="1"
+            max="{{ product.stock }}"
+          >
+        </label>
+
+        <button class="button quantity-form__submit" type="submit">Add to Cart</button>
+      </form>
+      {% elif product.stock > 0 and current_user.is_authenticated and current_user.is_admin %}
+      <div class="product-detail__auth-cta">
+        <a class="button button--ghost" href="{{ url_for('admin.dashboard') }}">
+          Open Admin Dashboard
+        </a>
+        <p class="product-detail__note">
+          Admin accounts cannot use the customer cart flow. Use the admin area to manage catalog
+          records instead.
+        </p>
+      </div>
+      {% elif product.stock > 0 %}
+      <div class="product-detail__auth-cta">
+        <a class="button" href="{{ url_for('auth.login', next=url_for('shop.detail', slug=product.slug)) }}">
+          Log In to Add to Cart
+        </a>
+        <p class="product-detail__note">
+          Sign in with a customer account to save this product to your cart and continue to checkout.
+        </p>
+      </div>
+      {% else %}
+      <button class="button button--disabled quantity-form__submit" type="button" aria-disabled="true">Out of Stock</button>
+      {% endif %}
+    </section>
+
+    <section class="card detail-stage__story">
+      <p class="card__label">Overview</p>
+      <h2>Built for high-intent shoppers.</h2>
+      <p>{{ product.full_description }}</p>
+      <p class="product-detail__note">
+        This academic/demo storefront uses simulated checkout and order flows while preserving a
+        realistic retail supplement presentation.
+      </p>
+    </section>
+</section>
+
+{% if related_products %}
+<section class="store-section store-section--related">
+  <div class="section__heading section__heading--store">
+    <div>
+      <p class="eyebrow">Related Products</p>
+      <h2>More from {{ product.category.name }}</h2>
+    </div>
+    <a class="text-link" href="{{ url_for('shop.index', category=product.category.slug) }}">See all {{ product.category.name }}</a>
+  </div>
+  <section class="catalog-grid catalog-grid--related" aria-label="Related products">
+    {% for product in related_products %}
+      {% include "shop/_product_card.html" %}
+    {% endfor %}
+  </section>
+</section>
+{% endif %}
+{% endblock %}

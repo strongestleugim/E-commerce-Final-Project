@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+  <p class="eyebrow">Admin</p>
+  <h1>{{ section_title }}</h1>
+  <p>{{ section_copy }}</p>
+</section>
+
+{% include "admin/_nav.html" %}
+
+<section class="card admin-placeholder">
+  <p class="card__label">Admin Overview</p>
+  <h2>{{ section_title }} workspace</h2>
+  <p>
+    This view keeps the admin navigation complete for the demo and highlights where this area fits
+    within the broader management workflow.
+  </p>
+  <a class="button button--ghost" href="{{ url_for('admin.dashboard') }}">Back to Dashboard</a>
+</section>
+{% endblock %}

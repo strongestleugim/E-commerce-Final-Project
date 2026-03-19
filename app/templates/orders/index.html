@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header page-header--split">
+  <div>
+    <p class="eyebrow">Orders</p>
+    <h1>Your order history</h1>
+    <p>Track the orders you have placed, review totals, and open full order details any time.</p>
+  </div>
+  <a class="button button--ghost" href="{{ url_for('shop.index') }}">Shop More Products</a>
+</section>
+
+{% if orders %}
+<section class="order-list">
+  {% for order in orders %}
+  <article class="card order-card">
+    <div class="order-card__header">
+      <div>
+        <p class="card__label">Order Number</p>
+        <h2>{{ order.order_number }}</h2>
+      </div>
+      <div class="order-card__badges">
+        <span class="stock-badge">{{ order.order_status }}</span>
+        <span class="product-chip">{{ order.payment_status }}</span>
+      </div>
+    </div>
+    <dl class="order-card__meta">
+      <div>
+        <dt>Date</dt>
+        <dd>{{ order.placed_at.strftime('%b %d, %Y %I:%M %p') }}</dd>
+      </div>
+      <div>
+        <dt>Total Amount</dt>
+        <dd>PHP {{ order.total_amount }}</dd>
+      </div>
+      <div>
+        <dt>Payment Method</dt>
+        <dd>{{ order.payment_method }}</dd>
+      </div>
+      <div>
+        <dt>Payment Status</dt>
+        <dd>{{ order.payment_status }}</dd>
+      </div>
+      <div>
+        <dt>Order Status</dt>
+        <dd>{{ order.order_status }}</dd>
+      </div>
+    </dl>
+    <a class="button" href="{{ url_for('orders.detail', order_number=order.order_number) }}">View Order</a>
+  </article>
+  {% endfor %}
+</section>
+{% else %}
+<section class="card catalog-empty">
+  <p class="card__label">No Orders Yet</p>
+  <h2>You have not placed an order yet.</h2>
+  <p>Once checkout is complete, your orders will appear here with status and totals.</p>
+  <div class="catalog-empty__actions">
+    <a class="button" href="{{ url_for('shop.index') }}">Browse Products</a>
+    <a class="button button--ghost" href="{{ url_for('cart.index') }}">Open Cart</a>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

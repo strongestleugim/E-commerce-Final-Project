@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+  <p class="eyebrow">Account</p>
+  <h1>{{ profile_user.name }}</h1>
+  <p>
+    Review the current signed-in account details and move directly into your orders or the shop.
+  </p>
+</section>
+
+<section class="content-grid content-grid--two">
+  <article class="card">
+    <p class="card__label">Account Details</p>
+    <h2>Profile summary</h2>
+    <dl class="detail-list">
+      <div>
+        <dt>Name</dt>
+        <dd>{{ profile_user.name }}</dd>
+      </div>
+      <div>
+        <dt>Email</dt>
+        <dd>{{ profile_user.email }}</dd>
+      </div>
+      <div>
+        <dt>Role</dt>
+        <dd>{{ profile_user.role|capitalize }}</dd>
+      </div>
+    </dl>
+  </article>
+
+  <article class="card">
+    <p class="card__label">Quick Actions</p>
+    <h2>Keep the demo moving</h2>
+    <p>
+      Use this account hub to move into your order history, confirm the current role, and continue
+      browsing the GAINZ LAB lineup.
+    </p>
+    <div class="catalog-empty__actions">
+      <a class="button" href="{{ url_for('orders.index') }}">View Orders</a>
+      <a class="button button--ghost" href="{{ url_for('shop.index') }}">Browse Products</a>
+    </div>
+  </article>
+</section>
+{% endblock %}

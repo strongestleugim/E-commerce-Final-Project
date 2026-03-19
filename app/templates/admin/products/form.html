@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header page-header--split">
+  <div>
+    <p class="eyebrow">Admin Products</p>
+    <h1>{% if mode == "create" %}Create product{% else %}Edit product{% endif %}</h1>
+    <p>Use the product schema fields directly and keep the storefront catalog easy to maintain.</p>
+  </div>
+  <a class="button button--ghost" href="{% if product %}{{ url_for('admin.product_detail', product_id=product.id) }}{% else %}{{ url_for('admin.products') }}{% endif %}">
+    Back
+  </a>
+</section>
+
+{% include "admin/_nav.html" %}
+
+<section class="admin-product-layout">
+  <form
+    class="card admin-form"
+    method="post"
+    enctype="multipart/form-data"
+    action="{% if product %}{{ url_for('admin.product_edit', product_id=product.id) }}{% else %}{{ url_for('admin.product_create') }}{% endif %}"
+  >
+    <input type="hidden" name="next" value="{% if product %}{{ url_for('admin.product_detail', product_id=product.id) }}{% else %}{{ url_for('admin.products') }}{% endif %}">
+
+    <div class="admin-form__header">
+      <div>
+        <p class="card__label">Product Form</p>
+        <h2>{% if mode == "create" %}New catalog entry{% else %}Update catalog entry{% endif %}</h2>
+      </div>
+      <span class="product-chip">{% if form_data.is_active %}Active{% else %}Inactive{% endif %}</span>
+    </div>
+
+    {% if not categories %}
+    <div class="alert alert--error">
+      At least one category is required before a product can be saved.
+    </div>
+    {% endif %}
+
+    <div class="admin-form__grid">
+      <label class="field">
+        <span class="field__label">Category</span>
+        <select class="field__input" name="category_id">
+          <option value="">Select a category</option>
+          {% for category in categories %}
+          <option value="{{ category.id }}" {% if form_data.category_id == category.id|string %}selected{% endif %}>
+            {{ category.name }}
+          </option>
+          {% endfor %}
+        </select>
+        {% if errors.category_id %}
+        <span class="field__error">{{ errors.category_id }}</span>
+        {% endif %}
+      </label>
+
+      <label class="field">
+        <span class="field__label">Name</span>
+        <input class="field__input" type="text" name="name" value="{{ form_data.name }}">
+        {% if errors.name %}
+        <span class="field__error">{{ errors.name }}</span>
+        {% endif %}
+      </label>
+    </div>
+
+    <label class="field">
+      <span class="field__label">Slug</span>
+      <input class="field__input" type="text" name="slug" value="{{ form_data.slug }}">
+      <span class="field__hint">Leave this blank to generate a slug from the product name.</span>
+      {% if errors.slug %}
+      <span class="field__error">{{ errors.slug }}</span>
+      {% endif %}
+    </label>
+
+    <label class="field">
+      <span class="field__label">Short Description</span>
+      <textarea class="field__input field__input--textarea" name="short_description" rows="3">{{ form_data.short_description }}</textarea>
+      {% if errors.short_description %}
+      <span class="field__error">{{ errors.short_description }}</span>
+      {% endif %}
+    </label>
+
+    <label class="field">
+      <span class="field__label">Full Description</span>
+      <textarea class="field__input field__input--textarea" name="full_description" rows="6">{{ form_data.full_description }}</textarea>
+      {% if errors.full_description %}
+      <span class="field__error">{{ errors.full_description }}</span>
+      {% endif %}
+    </label>
+
+    <div class="admin-form__grid admin-form__grid--three">
+      <label class="field">
+        <span class="field__label">Price</span>
+        <input class="field__input" type="number" name="price" value="{{ form_data.price }}" min="0" step="0.01">
+        {% if errors.price %}
+        <span class="field__error">{{ errors.price }}</span>
+        {% endif %}
+      </label>
+
+      <label class="field">
+        <span class="field__label">Stock</span>
+        <input class="field__input" type="number" name="stock" value="{{ form_data.stock }}" min="0" step="1">
+        {% if errors.stock %}
+        <span class="field__error">{{ errors.stock }}</span>
+        {% endif %}
+      </label>
+
+      <label class="field field--checkbox">
+        <span class="field__label">Visibility</span>
+        <span class="checkbox-row">
+          <input type="checkbox" name="is_active" {% if form_data.is_active %}checked{% endif %}>
+          <span>Product is active in the public catalog</span>
+        </span>
+      </label>
+    </div>
+
+    <div class="admin-form__grid">
+      <label class="field">
+        <span class="field__label">Flavor / Variant</span>
+        <input class="field__input" type="text" name="flavor_or_variant" value="{{ form_data.flavor_or_variant }}">
+        {% if errors.flavor_or_variant %}
+        <span class="field__error">{{ errors.flavor_or_variant }}</span>
+        {% endif %}
+      </label>
+
+      <label class="field">
+        <span class="field__label">Size / Weight</span>
+        <input class="field__input" type="text" name="size_or_weight" value="{{ form_data.size_or_weight }}">
+        {% if errors.size_or_weight %}
+        <span class="field__error">{{ errors.size_or_weight }}</span>
+        {% endif %}
+      </label>
+    </div>
+
+    <label class="field">
+      <span class="field__label">Product Image</span>
+      <input class="field__input field__input--file" type="file" name="image_file" accept=".jpg,.jpeg,.png,.webp,.gif,.svg">
+      <span class="field__hint">Optional. Uploading a new file updates the stored image path for this product.</span>
+      {% if errors.image_file %}
+      <span class="field__error">{{ errors.image_file }}</span>
+      {% endif %}
+    </label>
+
+    <div class="admin-form__actions">
+      <button class="button" type="submit" {% if not categories %}disabled aria-disabled="true"{% endif %}>
+        {% if mode == "create" %}Create Product{% else %}Save Changes{% endif %}
+      </button>
+      <a class="button button--ghost" href="{% if product %}{{ url_for('admin.product_detail', product_id=product.id) }}{% else %}{{ url_for('admin.products') }}{% endif %}">
+        Cancel
+      </a>
+    </div>
+  </form>
+
+  <aside class="card admin-product-preview">
+    <p class="card__label">Preview</p>
+    <h2>{% if product %}Current product{% else %}Image preview{% endif %}</h2>
+    <img
+      class="admin-product-preview__image"
+      src="{{ url_for('static', filename=(product.image_path if product else 'img/products/protein-placeholder.svg')) }}"
+      alt="{{ product.name if product else 'Product preview' }}"
+    >
+    {% if product %}
+    <dl class="detail-list">
+      <div>
+        <dt>Image Path</dt>
+        <dd>{{ product.image_path }}</dd>
+      </div>
+      <div>
+        <dt>Current Status</dt>
+        <dd>{{ "Active" if product.is_active else "Inactive" }}</dd>
+      </div>
+    </dl>
+    {% else %}
+    <p>
+      If no upload is provided, the product uses a category-based placeholder image so the catalog
+      stays visually complete.
+    </p>
+    {% endif %}
+  </aside>
+</section>
+{% endblock %}
